@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ruangapi:
+    image: ${DOCKER_REGISTRY-}ruangapi
+    build:
+      context: .
+      dockerfile: RuangAPI/Dockerfile
