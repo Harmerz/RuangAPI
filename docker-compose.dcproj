@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>727977f2-4210-450a-9d9a-7b25176fb6dc</ProjectGuid>
+    <ProjectGuid>3c74af27-4e3e-4d49-8299-96d49afd875a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>ruangapi</DockerServiceName>
