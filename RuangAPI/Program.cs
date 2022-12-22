@@ -7,13 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
-
-
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<APIContext>(options =>
     {
-        options.UseMySql("server=localhost;database=testing;user=root;password=;", ServerVersion.AutoDetect(connectionString));
+        options.UseMySql("server=103.167.132.107;database=ruang;user=root;password=DTIhxh19463;", ServerVersion.AutoDetect(connectionString));
     });
 
 builder.Services.AddControllers();

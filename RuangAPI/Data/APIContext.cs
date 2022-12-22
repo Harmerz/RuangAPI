@@ -8,8 +8,9 @@ namespace RuangAPI.Data
 {
     public class APIContext : DbContext
     {
-        public DbSet<RuangBooking> Bookings { get; set; }
+        public DbSet<RuangBooking> RuangBooking { get; set; }
         public DbSet<Users> Users { get; set; }
+        public DbSet<Login> Login { get; set; }
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
         {
@@ -27,7 +28,6 @@ namespace RuangAPI.Data
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("ERROR DISINI!!!!!!!!!!!!!!");
                 Debug.WriteLine(ex.Message);
             }
         }

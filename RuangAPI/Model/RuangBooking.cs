@@ -2,7 +2,7 @@
 
 namespace RuangAPI.Model
 {
-    [Table("RuangBooking")]
+    [Table("ruangbooking")]
     public class RuangBooking
     {
         [Key]
@@ -11,10 +11,12 @@ namespace RuangAPI.Model
         public int? Id { get; set; }
         [Column("name")]
         public string? name { get; set; }
+        [Column("date")]
+        public string? date { get; set; }
         [Column("room")]
         public string? room { get; set; }
         [Column("NIM")]
-        public string? NIM { get; set; }
+        public string? nim { get; set; }
         [Column("_00")]
         public string? _00 { get; set; }
         [Column("_01")]

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RuangAPI.Data;
 using RuangAPI.Model;
-
+using System.Diagnostics;
 
 namespace RuangAPI.Controllers
 {
@@ -10,7 +10,6 @@ namespace RuangAPI.Controllers
     public class RuangBookingController : ControllerBase
     {
         private readonly APIContext _context;
-
         public RuangBookingController(APIContext context)
         {
             _context = context;
@@ -18,54 +17,53 @@ namespace RuangAPI.Controllers
 
         //Create/Edit
         [HttpPost]
-        public JsonResult CreateEdit(RuangBooking booking)
+        public async Task<ActionResult<RuangBooking>> Create(RuangBooking Bookings)
         {
-            if (booking.Id == 0)
+            Debug.WriteLine(Bookings);
+            try
             {
-                _context.Bookings.Add(booking);
+                await _context.RuangBooking.AddAsync(Bookings);
+                await _context.SaveChangesAsync();
             }
-            else
+            catch (Exception ex)
             {
-                var bookingInDb = _context.Bookings.Find(booking.Id);
-
-                if (bookingInDb == null) return new JsonResult(NotFound());
-                bookingInDb = booking;
+                Debug.WriteLine(ex.Message);
             }
+            return Ok();
+        }
 
-            _context.SaveChanges();
-            return new JsonResult(Ok(booking));
+        [HttpPut]
+        public async Task<ActionResult> Update(RuangBooking Bookings)
+        {
+            _context.RuangBooking.Update(Bookings);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         //Get 
-        [HttpGet]
-        public JsonResult Get(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<RuangBooking>> GetById(int id)
         {
-            var result = _context.Bookings.Find(id);
+            var result = await _context.RuangBooking.FindAsync(id);
+            if (result != null) return Ok(result);
+            else return NotFound();
+        }
 
-            if (result == null) return new JsonResult(NotFound());
-            return new JsonResult(Ok(result));
+        [HttpGet]
+        public ActionResult<IEnumerable<RuangBooking>> Get()
+        {
+            return _context.RuangBooking;
         }
 
         //Delete
-        [HttpDelete]
-        public JsonResult Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
         {
-            var result = _context.Bookings.Find(id);
-            if (result == null)
-                return new JsonResult(NotFound());
-
-            _context.Bookings.Remove(result);
-            _context.SaveChanges();
-
-            return new JsonResult(NoContent());
-        }
-
-        //Get All
-        [HttpGet()]
-        public JsonResult GetAll()
-        {
-            var result = _context.Bookings.ToList();
-            return new JsonResult(Ok(result));
+            var result = await _context.RuangBooking.FindAsync(id);
+            if (result != null) _context.RuangBooking.Remove(result);
+            else return NotFound();
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
