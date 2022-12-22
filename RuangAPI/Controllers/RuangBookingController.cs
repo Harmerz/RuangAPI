@@ -2,6 +2,8 @@
 using RuangAPI.Data;
 using RuangAPI.Model;
 using System.Diagnostics;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Xml.Linq;
 
 namespace RuangAPI.Controllers
 {
@@ -50,10 +52,27 @@ namespace RuangAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<RuangBooking>>> GetByDateAndRoom(string date, string room)
+        {
+            var result = _context.RuangBooking.AsQueryable();
+            if (date != null)
+            {
+                result = result.Where(entry => entry.date == date);
+            }
+            if (room != null)
+            {
+                result = result.Where(entry => entry.room == room);
+            }
+
+            return await result.ToListAsync();
+        }
+
+        [HttpGet("/GetAllRuangBooking")]
         public ActionResult<IEnumerable<RuangBooking>> Get()
         {
             return _context.RuangBooking;
         }
+
 
         //Delete
         [HttpDelete("{id:int}")]
