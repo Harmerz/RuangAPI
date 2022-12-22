@@ -1,10 +1,30 @@
 version: '3.4'
 
+networks:
+  backend:
+
 services:
+  ruangdb:
+    container_name: ruang-db
+    image: mysql:8.0.29-oracle
+    environment:
+     - MYSQL_ROOT_PASSWORD=password@12345#
+    ports:
+     - 18003:3306 
+    networks:
+     - backend
+
   ruangapi:
+    container_name: ruang-api
     image: ${DOCKER_REGISTRY-}ruangapi
     build:
       context: .
       dockerfile: RuangAPI/Dockerfile
+    networks:
+     - backend
     ports:
-      - "8000:5000"
+     - 8004:80
+    environment:
+     - DB_HOST=ruangdb
+     - DB_NAME=ruang
+     - DB_ROOT_PASSWORD=password@12345#

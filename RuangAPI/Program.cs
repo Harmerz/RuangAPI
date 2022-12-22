@@ -1,16 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using RuangAPI.Data;
 using Pomelo.EntityFrameworkCore.MySql;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "103.167.132.107";
+var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "ruang";
+var dbPassword = Environment.GetEnvironmentVariable("DB_ROOT_PASSWORD") ?? "DTIhxh19463";
+var connectionString = $"server={dbHost};port=3306;database={dbName};user=root;password={dbPassword}";
 builder.Services.AddDbContext<APIContext>(options =>
     {
-        options.UseMySql("server=103.167.132.107;database=ruang;user=root;password=DTIhxh19463;", ServerVersion.AutoDetect(connectionString));
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     });
 
 builder.Services.AddControllers();
