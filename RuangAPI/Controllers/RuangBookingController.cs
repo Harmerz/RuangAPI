@@ -5,7 +5,7 @@ using RuangAPI.Model;
 
 namespace RuangAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RuangBookingController : ControllerBase
     {

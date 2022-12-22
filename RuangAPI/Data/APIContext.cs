@@ -1,15 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using RuangAPI.Model;
+using System.Diagnostics;
 
 namespace RuangAPI.Data
 {
     public class APIContext : DbContext
     {
         public DbSet<RuangBooking> Bookings { get; set; }
+        public DbSet<Users> Users { get; set; }
         public APIContext(DbContextOptions<APIContext> options)
-            :base (options)
+            : base(options)
         {
+            try
+            {
+                var databaseCreator = Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator;
+                if(databaseCreator != null)
+                {
+                    // Create Databasse if cannot Connect
+                    if (!databaseCreator.CanConnect()) databaseCreator.Create();
 
+                    // Create Tables if no table exist
+                    if (!databaseCreator.HasTables()) databaseCreator.CreateTables();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("ERROR DISINI!!!!!!!!!!!!!!");
+                Debug.WriteLine(ex.Message);
+            }
         }
     }
 }

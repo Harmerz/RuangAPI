@@ -1,12 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using RuangAPI.Data;
+using Pomelo.EntityFrameworkCore.MySql;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
 
-builder.Services.AddDbContext<APIContext>(options => options.UseInMemoryDatabase("RuangDb"));
+
+
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<APIContext>(options =>
+    {
+        options.UseMySql("server=localhost;database=testing;user=root;password=;", ServerVersion.AutoDetect(connectionString));
+    });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
