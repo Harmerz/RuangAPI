@@ -37,7 +37,7 @@ namespace RuangAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<Login>> GetById(int id)
         {
-            var result = await _context.Login.FindAsync(id);
+            var result = await _context.Users.FindAsync(id);
             if (result != null) return Ok(result);
             else return NotFound();
         }

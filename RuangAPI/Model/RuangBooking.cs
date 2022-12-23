@@ -7,8 +7,8 @@ namespace RuangAPI.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("Id")]
-        public int? Id { get; set; }
+        [Column("bookId")]
+        public int? bookId { get; set; }
         [Column("name")]
         public string? name { get; set; }
         [Column("date")]
@@ -26,7 +26,7 @@ namespace RuangAPI.Model
         [Column("purpose")]
         public string? purpose { get; set; }
         [Column("person")]
-        public int? person { get; set; }
+        public string? person { get; set; }
 
     }
 }

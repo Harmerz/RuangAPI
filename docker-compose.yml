@@ -24,7 +24,8 @@ services:
      - backend
     ports:
      - 8004:80
+     - 5555:443
     environment:
-     - DB_HOST=ruangdb
+     - DB_HOST=103.167.132.107
      - DB_NAME=ruang
-     - DB_ROOT_PASSWORD=password@12345#
+     - DB_ROOT_PASSWORD=DTIhxh19463
