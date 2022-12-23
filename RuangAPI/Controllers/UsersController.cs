@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RuangAPI.Data;
 using RuangAPI.Model;
 using System.Diagnostics;
@@ -7,9 +8,12 @@ namespace RuangAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+
     public class UsersController : ControllerBase
     {
         private readonly APIContext _context;
+
+       
 
         public UsersController(APIContext context)
         {
@@ -46,14 +50,40 @@ namespace RuangAPI.Controllers
         public async Task<ActionResult<Users>> GetById(int id)
         {
             var result = await _context.Users.FindAsync(id);
-            if (result != null) return Ok(result);
+            UserParse usr = new UserParse()
+            {
+                id = result?.id.ToString(),
+                username = result?.username,
+                password = result?.password,
+                email = result?.email,
+                fullname = result?.fullname,
+                nim = result?.nim,
+            };
+            if (result != null) return Ok(usr);
             else return NotFound();
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Users>> Get()
+        public async Task<ActionResult<UserParse[]>> Get()
         {
-            return _context.Users;
+            UserParse[] UsersParses = new UserParse[_context.Users.Count()];
+            var i = 0;
+            foreach(var result in _context.Users)
+            {
+                
+                UserParse usr = new UserParse()
+                {
+                    id = result?.id.ToString(),
+                    username = result?.username,
+                    password = result?.password,
+                    email = result?.email,
+                    fullname = result?.fullname,
+                    nim = result?.nim,
+                };
+                UsersParses[i] = usr;
+                i++;
+            }
+            return UsersParses;
         }
 
         //Delete

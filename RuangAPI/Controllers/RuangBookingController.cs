@@ -47,12 +47,26 @@ namespace RuangAPI.Controllers
         public async Task<ActionResult<RuangBooking>> GetById(int id)
         {
             var result = await _context.RuangBooking.FindAsync(id);
-            if (result != null) return Ok(result);
+            RuangBookingParse ruangBookingParse = new RuangBookingParse()
+            {
+                bookId = result?.bookId.ToString(),
+                name = result?.name,
+                room = result?.room,
+                nim = result?.nim,
+                date = result?.date,
+                _00 = result?._00,
+                _01 = result?._01,
+                _02 = result?._02,
+                purpose = result?.purpose,
+                person = result?.person,
+
+            };
+            if (result != null) return Ok(ruangBookingParse);
             else return NotFound();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RuangBooking>>> GetByDateAndRoom(string date, string room)
+        public async Task<ActionResult<IEnumerable<RuangBookingParse>>> GetByDateAndRoom(string? date, string? room)
         {
             var result = _context.RuangBooking.AsQueryable();
             if (date != null)
@@ -63,14 +77,58 @@ namespace RuangAPI.Controllers
             {
                 result = result.Where(entry => entry.room == room);
             }
+            var temp = await result.ToListAsync();
+            RuangBookingParse[] ruangBookingParses = new RuangBookingParse[temp.Count()];
+            var i = 0;
+            foreach (var rooms in temp)
+            {
 
-            return await result.ToListAsync();
+                RuangBookingParse ruangBookingParse = new RuangBookingParse()
+                {
+                    bookId = rooms?.bookId.ToString(),
+                    name = rooms?.name,
+                    room = rooms?.room,
+                    nim = rooms?.nim,
+                    date = rooms?.date,
+                    _00 = rooms?._00,
+                    _01 = rooms?._01,
+                    _02 = rooms?._02,
+                    purpose = rooms?.purpose,
+                    person = rooms?.person,
+
+                };
+                ruangBookingParses[i] = ruangBookingParse;
+                i++;
+            }
+            return ruangBookingParses;
         }
 
         [HttpGet("/GetAllRuangBooking")]
-        public ActionResult<IEnumerable<RuangBooking>> Get()
+        public ActionResult<IEnumerable<RuangBookingParse>> Get()
         {
-            return _context.RuangBooking;
+            RuangBookingParse[] ruangBookingParses = new RuangBookingParse[_context.RuangBooking.Count()];
+            var i = 0;
+            foreach (var rooms in _context.RuangBooking)
+            {
+
+                RuangBookingParse ruangBookingParse = new RuangBookingParse()
+                {
+                    bookId = rooms?.bookId.ToString(),
+                    name = rooms?.name,
+                    room = rooms?.room,
+                    nim = rooms?.nim,
+                    date = rooms?.date,
+                    _00 = rooms?._00,
+                    _01 = rooms?._01,
+                    _02 = rooms?._02,
+                    purpose = rooms?.purpose,
+                    person = rooms?.person,
+
+                };
+                ruangBookingParses[i] = ruangBookingParse;
+                i++;
+            }
+            return ruangBookingParses;
         }
 
 

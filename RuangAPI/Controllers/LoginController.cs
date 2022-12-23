@@ -34,12 +34,35 @@ namespace RuangAPI.Controllers
         }
 
         //Get 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Login>> GetById(int id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<LoginParse>>> GetByUsrPass(string username, string password)
         {
-            var result = await _context.Users.FindAsync(id);
-            if (result != null) return Ok(result);
-            else return NotFound();
+            var result = _context.Login.AsQueryable();
+            if (username != null)
+            {
+                result = result.Where(entry => entry.username == username);
+            }
+            if (password != null)
+            {
+                result = result.Where(entry => entry.password == password);
+            }
+            var temp = await result.ToListAsync();
+            LoginParse[] loginParses = new LoginParse[temp.Count()];
+            var i = 0;
+            foreach (var login in temp)
+            {
+
+                LoginParse loginParse = new LoginParse()
+                {
+                    id = login?.id.ToString(),
+                    username = login?.username,
+                    password = login?.password,
+
+                };
+                loginParses[i] = loginParse;
+                i++;
+            }
+            return loginParses;
         }
     }
 }
